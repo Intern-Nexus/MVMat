@@ -4,7 +4,6 @@ data/normal/
 data/out_mesh/
 data/PBR_6views/
 objs/
-scripts/
 bkp/
 torch_scatter/
 Real-ESRGAN/
