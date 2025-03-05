@@ -30,4 +30,4 @@ python render_combine.py --mesh_id $mesh_id \
     --normal_dir data/out_mesh
 
 #### step 6: Convert obj to glb: PBR UV map + obj → glb
-/cpfs01/user/xuxudong/packages/blender-3.4.1-linux-x64/blender -b -P bpy_obj_to_glb.py -- --mesh_id $mesh_id
+blender-3.4.1-linux-x64/blender -b -P bpy_obj_to_glb.py -- --mesh_id $mesh_id
