@@ -17,26 +17,29 @@ pip install -r requirements.txt
 ```
 
 ## Download checkpoints
+For our modified weights, we provide two download sources: **HuggingFace** and **ModelScope**.
 ### Pre-trained weights
 - MVDream & MVControlNet
 
-For MVDream base model and Multi-view ControlNet, we use a third-party [**diffusers implementation**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion) inherited from the [**HuggingFace repo**](https://huggingface.co/lzq49/mvdream-sd21-diffusers) of [**Controllable Text-to-3D Generation via Surface-Aligned Gaussian Splatting**](https://lizhiqi49.github.io/MVControl/), instead of the official implementation.
+For MVDream and Multi-view ControlNet base models, we use a third-party **diffusers implementation** inherited from the [**HuggingFace repo**](https://huggingface.co/lzq49/mvdream-sd21-diffusers) of [**Controllable Text-to-3D Generation via Surface-Aligned Gaussian Splatting**](https://lizhiqi49.github.io/MVControl/), instead of the official implementation.
 
-Download [**MVDream**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion) and [**MVControlNet**](https://huggingface.co/lzq49/mvcontrol-4v-normal).
+**MVDream** [**HuggingFace**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion), [**ModelScope**](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion)
+
+**MVControlNet** [**HuggingFace**](https://huggingface.co/lzq49/mvcontrol-4v-normal)
 
 - CLIP
 
-Download [**CLIP-ViT-H-14-laion2B-s32B-b79K**](https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K).
+**CLIP-ViT-H-14-laion2B-s32B-b79K** [**HuggingFace**](https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K)
 
 - MVSuperResolution
 
 For multi-view super-resolution, we use a ControlNet-Tile model provided by [**Unique3D**](https://wukailu.github.io/Unique3D/).
 
-Download [**controlnet-tile**](https://huggingface.co/spaces/Wuvin/Unique3D/tree/main/ckpt/controlnet-tile).
+**controlnet-tile** [**HuggingFace**](https://huggingface.co/spaces/Wuvin/Unique3D/tree/main/ckpt/controlnet-tile)
 
 - SuperResolution
 
-Download [**Real-ESRGAN**](https://github.com/xinntao/Real-ESRGAN), and set it up.
+Refer to the repo of [**Real-ESRGAN**](https://github.com/xinntao/Real-ESRGAN) to set it up.
 
 - Blender
 
@@ -50,11 +53,17 @@ Download [**pytorch_model.bin**]().
 ### Final saved fine-tuned checkpoints
 - IP-Adapter & Image Projection Model
 
-Download [**ip_adapter.pt**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/ip_adapter.pt?download=true) and [**image_proj_model.pt**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/image_proj_model.pt?download=true).
+**IP-Adapter** [**HuggingFace**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/ip_adapter.pt?download=true), [**ModelScope**](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion/resolve/master/ip_adapter.pt)
+
+**Image Projection Model** [**HuggingFace**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/image_proj_model.pt?download=true), [**ModelScope**](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion/resolve/master/image_proj_model.pt)
+
+- MVControlNet
+
+The fine-tuned **MVControlNet** [**HuggingFace**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/tree/main/controlnet), [**ModelScope**](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion)
 
 - UNet LoRA & Multi-branch
 
-Download [**unet.pt**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/unet.pt?download=true), LoRA and Multi-branch have been unified in it.
+**UNet** (UNet base model, LoRA and Multi-branch) [**HuggingFace**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/unet.pt?download=true), [**ModelScope**](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion/resolve/master/unet.pt)
 
 ## Usage
 ### Prepare input

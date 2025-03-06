@@ -8,3 +8,5 @@ bkp/
 torch_scatter/
 Real-ESRGAN/
 mvsr/ckpt/
+upload.py
+tmp.py
