@@ -66,8 +66,10 @@ MVMat
 |-- data
     |-- ctrlnet_img
         |-- fc4_crop.png
+        |-- ironman.png
         |-- ...
     |-- input_mesh
+        |-- batman.obj
         |-- f_pants.obj
         |-- ...
 ```
@@ -95,10 +97,11 @@ python ctrlnet_gen.py --ctrlnet_seed 12 \
 python inference.py --mvdiff_seed=1234 \
     --input_path="data/normal/$mesh_id" \
     --out_path="data/PBR_6views/$mesh_id" \
+    --text_prompt="" \ # MVMat Diffusion can also take an additional text prompt, but it's optional. We recommend injecting text prompts into step 2 to generate normal-aligned images first to achieve text-guided multi-view PBR generation
     --do_mv_super_res
 
 #### step 4: PBR SR: 6 views PBR → 6 views PBR upsample
-python run_PBR_SR.py
+python run_PBR_SR.py --mesh_id $mesh_id
 
 #### step 5: PBR combine: 6 views PBR upsample → PBR UV map + obj
 python render_combine.py --mesh_id $mesh_id \
@@ -107,7 +110,7 @@ python render_combine.py --mesh_id $mesh_id \
     --normal_dir data/out_mesh
 
 #### step 6: Convert obj to glb: PBR UV map + obj → glb
-blender-3.4.1-linux-x64/blender -b -P bpy_obj_to_glb.py -- --mesh_id $mesh_id
+blender -b -P bpy_obj_to_glb.py -- --mesh_id $mesh_id
 ```
 - Run **run_all.sh** for inference.
 ```bash

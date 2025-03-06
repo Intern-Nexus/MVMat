@@ -503,7 +503,7 @@ def mv_super_resolution(pipe, rgb_pils, front_pil, output_path, output_name, mat
         refine_rgb.save(f"{output_path}/{output_name}/{output_name}_{material_type}_{v}_upscale.png")
 
 def inference_multi_branch(pretrained_path, lora_rank, guidance_scale, num_inference_steps, seed, 
-                            input_path, out_path, use_feature_full_token, condition_mode, multi_branch_type, 
+                            input_path, out_path, text_prompt, use_feature_full_token, condition_mode, multi_branch_type, 
                             do_mv_super_res, do_single_inference):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print_green(device)
@@ -622,7 +622,7 @@ def inference_multi_branch(pretrained_path, lora_rank, guidance_scale, num_infer
 
         tmp_unet_up_blocks_last_m = copy.deepcopy(unet.up_blocks_last_m)
         tmp_unet_up_blocks_last_m.load_state_dict(unet.up_blocks_last_m.state_dict())
-    print_green('use multi-branch')
+    #print_green('use multi-branch')
 
     # add LoRA
     unet_lora_config = LoraConfig(
@@ -661,26 +661,26 @@ def inference_multi_branch(pretrained_path, lora_rank, guidance_scale, num_infer
         )
 
     if re.match(r"checkpoint-\d+", pretrained_path.split('/')[-1]):
-        print_green(f"Use checkpoints: {pretrained_path}")
+        print_green(f"[INFO] Use checkpoints: {pretrained_path}")
         mv_diff_wrapper.load_state_dict(torch.load(f'{pretrained_path}/pytorch_model.bin'), strict=False)
         mv_diff_wrapper = mv_diff_wrapper.to(device, dtype=torch.float16)
     else:
-        print_green('Use final save')
+        print_green('[INFO] Use final save')
         image_proj_model.load_state_dict(torch.load(f'{pretrained_path}/image_proj_model.pt'))
         image_proj_model = image_proj_model.to(device=device, dtype=torch.float16)
-        print_green('Image Projection Model is loaded.')
+        print_green('[INFO] Image Projection Model is loaded.')
 
         ip_adapter_modules.load_state_dict(torch.load(f'{pretrained_path}/ip_adapter.pt'))
         ip_adapter_modules = ip_adapter_modules.to(device=device, dtype=torch.float16)
-        print_green('IP-Adapter is loaded.')
+        print_green('[INFO] IP-Adapter is loaded.')
 
         camera_proj.load_state_dict(torch.load(f'{pretrained_path}/camera_proj.pt'))
         camera_proj = camera_proj.to(device=device, dtype=torch.float16)
-        print_green('Camera Projection Model is loaded.')
+        print_green('[INFO] Camera Projection Model is loaded.')
 
         unet.load_state_dict(torch.load(f'{pretrained_path}/unet.pt'))
         unet = unet.to(device=device, dtype=torch.float16)
-        print_green('UNet LoRA and Add-on Layers are loaded.')
+        print_green('[INFO] UNet LoRA and Add-on Layers are loaded.')
 
         controlnet = MultiViewControlNetModel.from_pretrained(
             pretrained_model_name_or_path=pretrained_path,
@@ -694,7 +694,7 @@ def inference_multi_branch(pretrained_path, lora_rank, guidance_scale, num_infer
         set_self_attn_processor(
             controlnet, attn_procs_cls(num_views=6)
         )
-        print_green('Multi-view ControlNet is loaded.')
+        print_green('[INFO] Multi-view ControlNet is loaded.')
 
     if do_single_inference:
         validation_images = [input_path]
@@ -707,7 +707,7 @@ def inference_multi_branch(pretrained_path, lora_rank, guidance_scale, num_infer
                 tmp.append(f'{input_path}/{v}')
         validation_images = tmp
         del tmp
-    validation_prompts = ["a pair of blue cotton pants with white patterns"] * len(validation_images)
+    validation_prompts = [text_prompt] * len(validation_images)
 
     multi_inference(
         vae=vae,
@@ -740,6 +740,7 @@ if __name__ == '__main__':
     parser.add_argument("--mvdiff_seed", type=int, default=42)
     parser.add_argument("--input_path", type=str, default=None)
     parser.add_argument("--out_path", type=str, default=None)
+    parser.add_argument("--text_prompt", type=str, default="")
     parser.add_argument("--do_mv_super_res", action="store_true")
     args = parser.parse_args()
 
@@ -753,6 +754,7 @@ if __name__ == '__main__':
         seed=args.mvdiff_seed, # 3407
         input_path=args.input_path,
         out_path=args.out_path,
+        text_prompt=args.text_prompt,
         use_feature_full_token=True,
         condition_mode='image', # text, image, text-image
         multi_branch_type='v2',
