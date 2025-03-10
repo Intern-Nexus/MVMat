@@ -8,3 +8,7 @@ bkp/
 torch_scatter/
 Real-ESRGAN/
 mvsr/ckpt/
+scripts/
+ckpt/
+ip_adapter/models/
+*.ipynb

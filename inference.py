@@ -41,7 +41,7 @@ import copy
 import re
 from utils import make_image_grid, split_image
 
-from mvsr.app.all_models import model_zoo
+from mvsr.all_models import model_zoo
 
 def print_green(text):
     print(f"\033[92m{text}\033[0m")
@@ -510,8 +510,8 @@ def inference_multi_branch(pretrained_path, lora_rank, guidance_scale, num_infer
 
     # base model initialization
     mv_pipe = load_mvcontrol_pipeline(
-        pretrained_model_name_or_path="/cpfs01/shared/landmark_3dgen/xuxudong_group/huggingface/hub/models--lzq49--mvdream-sd21-diffusers/snapshots/0c0f76ed8d4e664b6615cc5b4529df165246fe6e",
-        pretrained_controlnet_name_or_path="/cpfs01/shared/landmark_3dgen/xuxudong_group/huggingface/hub/models--lzq49--mvcontrol-4v-normal/snapshots/379a2e50943d46dcf479c7b33dedb6fb6df74620",
+        pretrained_model_name_or_path="lzq49/mvdream-sd21-diffusers",
+        pretrained_controlnet_name_or_path="lzq49/mvcontrol-4v-normal",
         weights_dtype=torch.float32,
         num_views=6,
         device=device,
@@ -524,16 +524,16 @@ def inference_multi_branch(pretrained_path, lora_rank, guidance_scale, num_infer
     unet = mv_pipe.unet
     camera_proj = mv_pipe.camera_proj
     tokenizer = AutoTokenizer.from_pretrained(
-            "/cpfs01/shared/landmark_3dgen/xuxudong_group/huggingface/hub/models--lzq49--mvdream-sd21-diffusers/snapshots/0c0f76ed8d4e664b6615cc5b4529df165246fe6e",
+            "lzq49/mvdream-sd21-diffusers",
             subfolder="tokenizer",
             use_fast=False,
         )
 
     image_encoder = CLIPVisionModelWithProjection.from_pretrained(
-        pretrained_model_name_or_path='/cpfs01/shared/landmark_3dgen/xuxudong_group/huggingface/hub/models--laion--CLIP-ViT-H-14-laion2B-s32B-b79K/snapshots/de081ac0a0ca8dc9d1533eed1ae884bb8ae1404b',
+        pretrained_model_name_or_path='laion/CLIP-ViT-H-14-laion2B-s32B-b79K',
     ).to(device=device, dtype=torch.float16)
     image_processor = CLIPImageProcessor.from_pretrained(
-        pretrained_model_name_or_path='/cpfs01/shared/landmark_3dgen/xuxudong_group/huggingface/hub/models--laion--CLIP-ViT-H-14-laion2B-s32B-b79K/snapshots/de081ac0a0ca8dc9d1533eed1ae884bb8ae1404b',
+        pretrained_model_name_or_path='laion/CLIP-ViT-H-14-laion2B-s32B-b79K',
     )
     
     #ip-adapter
@@ -743,7 +743,7 @@ if __name__ == '__main__':
     parser.add_argument("--do_mv_super_res", action="store_true")
     args = parser.parse_args()
 
-    pretrained_path = '/cpfs01/shared/landmark_3dgen/xuxudong_group/wangyitong/ai_demo/mvdream_control/trained_weights/gpu32_lora_rank16_alpha1_mat3d_clip_aesthetic_6views_perturb_front_unified_lora_branch_lr2e-4_other_lr1e-4_al0.5_r0.25_m0.25_full_image_token'
+    pretrained_path = './ckpt'
 
     inference_multi_branch(
         pretrained_path=pretrained_path,

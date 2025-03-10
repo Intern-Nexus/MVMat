@@ -1,13 +1,12 @@
 import torch
-from mvsr.scripts.sd_model_zoo import load_common_sd15_pipe
+from .sd_model_zoo import load_common_sd15_pipe
 from diffusers import StableDiffusionControlNetImg2ImgPipeline, StableDiffusionPipeline
 
 
 class MyModelZoo:
     _pipe_disney_controlnet_lineart_ipadapter_i2i: StableDiffusionControlNetImg2ImgPipeline = None
     
-    #base_model = "runwayml/stable-diffusion-v1-5"
-    base_model = "/cpfs01/user/wangyitong/.cache/huggingface/hub/models--runwayml--stable-diffusion-v1-5/snapshots/1d0c4ebf6ff58a5caecab40fa1406526bca4b5b9"
+    base_model = "runwayml/stable-diffusion-v1-5"
 
     def __init__(self, base_model=None) -> None:
         if base_model is not None:

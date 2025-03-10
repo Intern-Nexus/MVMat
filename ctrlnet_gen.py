@@ -24,8 +24,8 @@ def generate_image_prompt_via_normal_controlnet(normal_path, prompt, controlnet_
     normal = Image.open(normal_path)
         
     if controlnet_cond_mode == 'text':
-        sd_ckpt = "/cpfs01/user/wangyitong/.cache/huggingface/hub/models--runwayml--stable-diffusion-v1-5/snapshots/1d0c4ebf6ff58a5caecab40fa1406526bca4b5b9"
-        ctrlnet_ckpt = "/cpfs01/user/wangyitong/.cache/huggingface/hub/models--lllyasviel--control_v11p_sd15_normalbae/snapshots/cb7296e6587a219068e9d65864e38729cd862aa8"
+        sd_ckpt = "runwayml/stable-diffusion-v1-5"
+        ctrlnet_ckpt = "lllyasviel/control_v11p_sd15_normalbae"
 
         control_image = normal
 
@@ -48,11 +48,11 @@ def generate_image_prompt_via_normal_controlnet(normal_path, prompt, controlnet_
         image.save(f"{os.path.dirname(normal_path)}/ip.png")
     
     elif controlnet_cond_mode == 'image':
-        sd_ckpt = "/cpfs01/shared/landmark_3dgen/xuxudong_group/huggingface/hub/models--runwayml--stable-diffusion-v1-5/snapshots/f03de327dd89b501a01da37fc5240cf4fdba85a1"
-        ctrlnet_ckpt = "/cpfs01/user/wangyitong/.cache/huggingface/hub/models--lllyasviel--control_v11p_sd15_normalbae/snapshots/cb7296e6587a219068e9d65864e38729cd862aa8"
-        vae_ckpt = "/cpfs01/user/wangyitong/.cache/huggingface/hub/models--stabilityai--sd-vae-ft-mse/snapshots/31f26fdeee1355a5c34592e401dd41e45d25a493"
-        image_encoder_ckpt = "/cpfs01/shared/landmark_3dgen/xuxudong_group/huggingface/hub/models--h94--IP-Adapter/snapshots/018e402774aeeddd60609b4ecdb7e298259dc729/models/image_encoder/"
-        ip_ckpt = "/cpfs01/shared/landmark_3dgen/xuxudong_group/huggingface/hub/models--h94--IP-Adapter/snapshots/018e402774aeeddd60609b4ecdb7e298259dc729/models/ip-adapter_sd15.safetensors"
+        sd_ckpt = "runwayml/stable-diffusion-v1-5"
+        ctrlnet_ckpt = "lllyasviel/control_v11p_sd15_normalbae"
+        vae_ckpt = "stabilityai/sd-vae-ft-mse"
+        image_encoder_ckpt = "ip_adapter/models/image_encoder/"
+        ip_ckpt = "ip_adapter/models/ip-adapter_sd15.safetensors"
         device = "cuda"
 
         noise_scheduler = DDIMScheduler(
