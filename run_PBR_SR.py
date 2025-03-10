@@ -2,10 +2,16 @@ import os
 import os.path as osp
 import shutil
 import subprocess
+import argparse
 
-src_path = "data/PBR_6views"
+parser = argparse.ArgumentParser(description="")
+parser.add_argument("--mesh_id", type=str, default=None, required=True)
+parser.add_argument("--src_path", type=str, default="data/PBR_6views")
+args = parser.parse_args()
+
+src_path = args.src_path
 mesh_ids = [
-    'f_pants',
+    args.mesh_id,
 ]
 mat_names = ['a', 'r', 'm']
 views = ['top', 'bottom']
