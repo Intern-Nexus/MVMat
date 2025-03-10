@@ -9,13 +9,13 @@ python render_combine.py --mesh_id $mesh_id \
     --normal_dir data/normal
 
 #### step 2: get sample image: front normal + img/txt prompt → sample image
-python ctrlnet_gen.py --ctrlnet_seed 42 \
+python ctrlnet_gen.py --ctrlnet_seed 12 \
     --controlnet_cond_mode="image" \
     --prompt="data/ctrlnet_img/fc4_crop.png" \
     --controlnet_normal_path="data/normal/$mesh_id/front.png"
 
 #### step 3: get 6 views PBR: sample image + 6 views normal → 6 views PBR
-python inference.py --mvdiff_seed=3407 \
+python inference.py --mvdiff_seed=1234 \
     --input_path="data/normal/$mesh_id" \
     --out_path="data/PBR_6views/$mesh_id" \
     --text_prompt="" \

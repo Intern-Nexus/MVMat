@@ -16,54 +16,38 @@ conda install pytorch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 pytorch-cud
 pip install -r requirements.txt
 ```
 
-## Download checkpoints
-For our modified weights, we provide two download sources: **HuggingFace** and **ModelScope**.
-### Pre-trained weights
-- MVDream & MVControlNet
+## Getting Started
 
-For MVDream and Multi-view ControlNet base models, we use a third-party **diffusers implementation** inherited from the [**HuggingFace repo**](https://huggingface.co/lzq49/mvdream-sd21-diffusers) of [**Controllable Text-to-3D Generation via Surface-Aligned Gaussian Splatting**](https://lizhiqi49.github.io/MVControl/), instead of the official implementation.
+Our model is based on **MVDream** and **Multi-view ControlNet**, so the resolution of our predicted PBR images is only 256 $\times$ 256.
+We leverage the **multi-view super-resolution** to increase the resolution to 512, and then employ **Real-ESRGAN** to upsample the PBR images to 2K resolution.
 
-**MVDream** [**HuggingFace**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion), [**ModelScope**](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion)
+### Multi-view Super-Resolution
+For multi-view super-resolution, we use a [ControlNet-Tile](https://huggingface.co/spaces/Wuvin/Unique3D/tree/main/ckpt/controlnet-tile) model provided by [**Unique3D**](https://wukailu.github.io/Unique3D/) and put it in `mvsr/ckpt`.
 
-**MVControlNet** [**HuggingFace**](https://huggingface.co/lzq49/mvcontrol-4v-normal)
+### Real-ESRGAN
+Refer to the repo of [**Real-ESRGAN**](https://github.com/xinntao/Real-ESRGAN) to set it up and put it in the current directory.
 
-- CLIP
+### IP-Adapter
+We employ IP-Adapter to synthesize a sample image to guide the PBR material generation as shown in step 2 below. You have to download IP-Adapter models and put them in `ip_adapter/models`.
 
-**CLIP-ViT-H-14-laion2B-s32B-b79K** [**HuggingFace**](https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K)
+### Our model
+For MVDream and Multi-view ControlNet base models, we use a third-party **diffusers implementation** of [**Controllable Text-to-3D Generation via Surface-Aligned Gaussian Splatting**](https://lizhiqi49.github.io/MVControl/), instead of the official implementation.
 
-- MVSuperResolution
+- **IP-Adapter**: [HuggingFace](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/ip_adapter.pt?download=true), [ModelScope](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion/resolve/master/ip_adapter.pt)
 
-For multi-view super-resolution, we use a ControlNet-Tile model provided by [**Unique3D**](https://wukailu.github.io/Unique3D/).
+- **Image Projection Model**: [HuggingFace](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/image_proj_model.pt?download=true), [ModelScope](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion/resolve/master/image_proj_model.pt)
 
-**controlnet-tile** [**HuggingFace**](https://huggingface.co/spaces/Wuvin/Unique3D/tree/main/ckpt/controlnet-tile)
+- **MVControlNet**: [HuggingFace](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/tree/main/controlnet), [ModelScope](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion)
 
-- SuperResolution
+- **UNet** (UNet base model, LoRA and Multi-branch) [HuggingFace](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/unet.pt?download=true), [ModelScope](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion/resolve/master/unet.pt)
 
-Refer to the repo of [**Real-ESRGAN**](https://github.com/xinntao/Real-ESRGAN) to set it up.
+**All-in-one**: [HuggingFace](), [ModelScope]()
 
-- Blender
+While inference, you have to put these models in `./ckpt`.
+
+### Blender
 
 Download [**Blender**](https://download.blender.org/release/Blender3.4/blender-3.4.1-linux-x64.tar.xz) and leverage it for the conversion in the last step.
-
-### (Optional) Fine-tuned checkpoints
-- All modules are unified in a single checkpoint.
-
-Download [**pytorch_model.bin**]().
-
-### Final saved fine-tuned checkpoints
-- IP-Adapter & Image Projection Model
-
-**IP-Adapter** [**HuggingFace**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/ip_adapter.pt?download=true), [**ModelScope**](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion/resolve/master/ip_adapter.pt)
-
-**Image Projection Model** [**HuggingFace**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/image_proj_model.pt?download=true), [**ModelScope**](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion/resolve/master/image_proj_model.pt)
-
-- MVControlNet
-
-The fine-tuned **MVControlNet** [**HuggingFace**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/tree/main/controlnet), [**ModelScope**](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion)
-
-- UNet LoRA & Multi-branch
-
-**UNet** (UNet base model, LoRA and Multi-branch) [**HuggingFace**](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/unet.pt?download=true), [**ModelScope**](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion/resolve/master/unet.pt)
 
 ## Usage
 ### Prepare input
