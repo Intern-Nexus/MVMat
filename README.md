@@ -21,8 +21,14 @@ pip install -r requirements.txt
 Our model is based on **MVDream** and **Multi-view ControlNet**, so the resolution of our predicted PBR images is only 256 $\times$ 256.
 We leverage the **multi-view super-resolution** to increase the resolution to 512, and then employ **Real-ESRGAN** to upsample the PBR images to 2K resolution.
 
+### MVDream & MVControlNet
+For MVDream and Multi-view ControlNet base models, we use a third-party **diffusers implementation** inherited from [**Controllable Text-to-3D Generation via Surface-Aligned Gaussian Splatting**](https://lizhiqi49.github.io/MVControl/), instead of the official implementation.
+- **MVDream**: [HuggingFace](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion), [ModelScope](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion)
+
+- **MVControlNet**: [HuggingFace](https://huggingface.co/lzq49/mvcontrol-4v-normal)
+
 ### Multi-view Super-Resolution
-For multi-view super-resolution, we use a [ControlNet-Tile](https://huggingface.co/spaces/Wuvin/Unique3D/tree/main/ckpt/controlnet-tile) model provided by [**Unique3D**](https://wukailu.github.io/Unique3D/) and put it in `mvsr/ckpt`.
+For multi-view super-resolution, we use a [**ControlNet-Tile**](https://huggingface.co/spaces/Wuvin/Unique3D/tree/main/ckpt/controlnet-tile) model provided by [**Unique3D**](https://wukailu.github.io/Unique3D/) and put it in `mvsr/ckpt`.
 
 ### Real-ESRGAN
 Refer to the repo of [**Real-ESRGAN**](https://github.com/xinntao/Real-ESRGAN) to set it up and put it in the current directory.
@@ -31,8 +37,6 @@ Refer to the repo of [**Real-ESRGAN**](https://github.com/xinntao/Real-ESRGAN) t
 We employ IP-Adapter to synthesize a sample image to guide the PBR material generation as shown in step 2 below. You have to download IP-Adapter models and put them in `ip_adapter/models`.
 
 ### Our model
-For MVDream and Multi-view ControlNet base models, we use a third-party **diffusers implementation** of [**Controllable Text-to-3D Generation via Surface-Aligned Gaussian Splatting**](https://lizhiqi49.github.io/MVControl/), instead of the official implementation.
-
 - **IP-Adapter**: [HuggingFace](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/ip_adapter.pt?download=true), [ModelScope](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion/resolve/master/ip_adapter.pt)
 
 - **Image Projection Model**: [HuggingFace](https://huggingface.co/SnowflakeWang/MV-PBRMat-Diffusion/resolve/main/image_proj_model.pt?download=true), [ModelScope](https://www.modelscope.cn/models/snowflakewang/MV-PBRMat-Diffusion/resolve/master/image_proj_model.pt)
