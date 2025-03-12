@@ -1,7 +1,6 @@
 import torch
 import pytorch3d
 import numpy as np
-import imageio
 from torch_scatter import scatter_mean
 
 from pytorch3d.io import load_objs_as_meshes, load_obj, save_obj, IO
@@ -11,9 +10,6 @@ from pytorch3d.renderer import (
 	FoVPerspectiveCameras, 
 	FoVOrthographicCameras,
 	AmbientLights,
-	PointLights, 
-	DirectionalLights, 
-	Materials, 
 	RasterizationSettings, 
 	MeshRenderer, 
 	MeshRasterizer,  
@@ -463,12 +459,6 @@ class UVProjection():
 			valid_triangles.append(valid_faceid)
 			triangle_mask = get_visible_triangles(valid_faceid)
 			visible_triangles.append(triangle_mask)
-
-			# cur_vis_triangles = get_all_visible_triangles(cur_faceid)
-			# imageio.imwrite(f"results/tmp/cur_vis{i}.png", (cur_vis_triangles[..., 0].cpu().numpy() * 255).astype(np.uint8))
-			# cos_vis_triangles = get_all_visible_triangles(invis_faceid)
-			# imageio.imwrite(f"results/tmp/cos_vis{i}.png", (cos_vis_triangles[..., 0].cpu().numpy() * 255).astype(np.uint8))
-			# imageio.imwrite(f"results/tmp/cos_value{i}.png", (cos_maps[i,:,:,0].cpu().numpy() * 255).astype(np.uint8))
 
 		cos_visible_triangles = torch.where(face_cos_sum >= cos_sum_threshold)[0]
 		self.cos_visible_triangles = get_visible_triangles(cos_visible_triangles)

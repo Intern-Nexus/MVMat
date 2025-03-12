@@ -42,23 +42,6 @@ class MatMerge(object):
 			img = (img * 255).astype(np.uint8)
 			imageio.imwrite(f"{basedir}/{img_name}.png", img)
 	
-	def get_vis_map(self):
-		os.makedirs(f"results/uv_mask/{self.mesh_id}", exist_ok=True)
-		mv_vismap = sum(self.uvp.visible_triangles).clamp(min=0, max=1)
-		imageio.imwrite(f"results/uv_mask/{self.mesh_id}/mask_mv.png", (mv_vismap[..., 0].cpu().numpy() * 255).astype(np.uint8))
-
-		all_uvmap = self.uvp.all_visible_triangles
-		imageio.imwrite(f"results/uv_mask/{self.mesh_id}/mask_alluv.png", (all_uvmap[..., 0].cpu().numpy() * 255).astype(np.uint8))
-		
-		cos_vismap = self.uvp.cos_visible_triangles
-		imageio.imwrite(f"results/uv_mask/{self.mesh_id}/mask_cosvis.png", (cos_vismap[..., 0].cpu().numpy() * 255).astype(np.uint8))
-
-		zero_pad = torch.zeros_like(mv_vismap)
-		vismap_com_cosvis = torch.cat([zero_pad, all_uvmap, cos_vismap], dim=-1)
-		imageio.imwrite(f"results/uv_mask/{self.mesh_id}/mask_compare_cosvis.png", (vismap_com_cosvis.cpu().numpy() * 255).astype(np.uint8))
-		vismap_com_mv = torch.cat([zero_pad, all_uvmap, mv_vismap], dim=-1)
-		imageio.imwrite(f"results/uv_mask/{self.mesh_id}/mask_compare_mv.png", (vismap_com_mv.cpu().numpy() * 255).astype(np.uint8))
-
 	def get_normal(self, out_dir):
 		verts, normals, depths, cos_angles, texels, fragments = self.uvp.render_geometry()
 		# normals: [Num_cam, H, W, 4], the last channel is the mask
@@ -130,7 +113,6 @@ if __name__ == '__main__':
 			autouv=False    # set True for the mesh w/o vt
 		)
 		matmerger.get_normal(out_dir=normal_path)
-		# matmerger.get_vis_map()  # visualize the area not covered by 6 views
 	elif args.run_mode == 'merge_PBR':
 		#### combine 6 views ####
 		render_size = args.normal_size * 4  # 2K-res PBR, 4K-res UV map
