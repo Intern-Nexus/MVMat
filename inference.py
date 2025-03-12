@@ -510,7 +510,7 @@ def inference_multi_branch(pretrained_path, lora_rank, guidance_scale, num_infer
 
     # base model initialization
     mv_pipe = load_mvcontrol_pipeline(
-        pretrained_model_name_or_path="lzq49/mvdream-sd21-diffusers",
+        pretrained_model_name_or_path="SnowflakeWang/MV-PBRMat-Diffusion", # "lzq49/mvdream-sd21-diffusers",
         pretrained_controlnet_name_or_path="lzq49/mvcontrol-4v-normal",
         weights_dtype=torch.float32,
         num_views=6,
@@ -524,7 +524,7 @@ def inference_multi_branch(pretrained_path, lora_rank, guidance_scale, num_infer
     unet = mv_pipe.unet
     camera_proj = mv_pipe.camera_proj
     tokenizer = AutoTokenizer.from_pretrained(
-            "lzq49/mvdream-sd21-diffusers",
+            "SnowflakeWang/MV-PBRMat-Diffusion", # "lzq49/mvdream-sd21-diffusers",
             subfolder="tokenizer",
             use_fast=False,
         )
